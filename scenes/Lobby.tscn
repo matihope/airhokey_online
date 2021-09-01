@@ -1,0 +1,98 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scenes/Lobby.gd" type="Script" id=1]
+[ext_resource path="res://res/GameTheme.tres" type="Theme" id=2]
+[ext_resource path="res://res/board.png" type="Texture" id=3]
+[ext_resource path="res://res/joystix.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=4]
+size = 48
+outline_size = 3
+outline_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+font_data = ExtResource( 4 )
+
+[node name="Lobby" type="Control"]
+theme = ExtResource( 2 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="board" type="Sprite" parent="."]
+modulate = Color( 0.588235, 0.588235, 0.588235, 1 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Connect" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonHost" type="Button" parent="Connect"]
+margin_left = 496.0
+margin_top = 296.0
+margin_right = 783.0
+margin_bottom = 368.0
+text = "HOST"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ButtonJoin" type="Button" parent="Connect"]
+margin_left = 496.0
+margin_top = 424.0
+margin_right = 783.0
+margin_bottom = 496.0
+text = "JOIN"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ServerIpInput" type="LineEdit" parent="Connect"]
+margin_left = 320.0
+margin_top = 544.0
+margin_right = 960.0
+margin_bottom = 636.0
+grow_horizontal = 2
+custom_fonts/font = SubResource( 4 )
+align = 1
+placeholder_text = "Server ip"
+caret_blink = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Connect"]
+margin_left = 280.0
+margin_top = 112.0
+margin_right = 1000.0
+margin_bottom = 231.0
+text = "Ultimate airhokey
+online!"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="WaitingForConnections" type="Label" parent="."]
+visible = false
+margin_left = 120.0
+margin_top = 328.0
+margin_right = 1160.0
+margin_bottom = 386.0
+text = "Waiting for connections..."
+align = 1
+
+[node name="WaitingForHost" type="Label" parent="."]
+visible = false
+margin_left = 120.0
+margin_top = 328.0
+margin_right = 1160.0
+margin_bottom = 386.0
+text = "Waiting for host..."
+align = 1
+
+[connection signal="pressed" from="Connect/ButtonHost" to="." method="_on_ButtonHost_pressed"]
+[connection signal="pressed" from="Connect/ButtonJoin" to="." method="_on_ButtonJoin_pressed"]

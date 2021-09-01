@@ -1,0 +1,158 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://scenes/Game.gd" type="Script" id=1]
+[ext_resource path="res://res/board.png" type="Texture" id=2]
+[ext_resource path="res://entities/ClientBall.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/BallController.gd" type="Script" id=4]
+[ext_resource path="res://res/outer_board.png" type="Texture" id=5]
+[ext_resource path="res://res/joystix.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://scenes/UI.gd" type="Script" id=7]
+[ext_resource path="res://res/GameTheme.tres" type="Theme" id=8]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 12, 120 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 5, 310 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 48
+outline_size = 3
+outline_color = Color( 0.0431373, 0.0431373, 0.0431373, 1 )
+font_data = ExtResource( 6 )
+
+[node name="Game" type="StaticBody2D"]
+collision_mask = 10
+script = ExtResource( 1 )
+
+[node name="LowerBoard" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Players" type="Node2D" parent="."]
+
+[node name="Player1Pos" type="Position2D" parent="."]
+position = Vector2( 192, 360 )
+
+[node name="Player2Pos" type="Position2D" parent="."]
+position = Vector2( 1088, 360 )
+
+[node name="MainCollision" type="CollisionPolygon2D" parent="."]
+position = Vector2( 5, 0 )
+polygon = PoolVector2Array( -85, -80, -85, 50, 1225, 50, 1225, 240, 1280, 240, 1280, 480, 1225, 480, 1225, 670, 45, 670, 45, 480, -10, 480, -10, 240, 45, 240, 45, 50, -85, 50, -85, 800, 1355, 800, 1355, -80 )
+
+[node name="BallController" type="Node2D" parent="."]
+script = ExtResource( 4 )
+
+[node name="Ball" parent="BallController" instance=ExtResource( 3 )]
+
+[node name="BSPosition" type="Position2D" parent="BallController"]
+position = Vector2( 640, 360 )
+
+[node name="OuterGameArea" type="Area2D" parent="BallController"]
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BallController/OuterGameArea"]
+polygon = PoolVector2Array( -1425, -195, -80, -80, 1360, -80, 1360, 800, -80, 800, -80, -80, -1400, -180, -1375, 1845, 2660, 1870, 2640, -985, -1475, -955 )
+
+[node name="LeftGoal" type="StaticBody2D" parent="."]
+position = Vector2( 38, 360 )
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftGoal"]
+shape = SubResource( 1 )
+
+[node name="LeftScoreArea" type="Area2D" parent="LeftGoal"]
+position = Vector2( -28, 0 )
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftGoal/LeftScoreArea"]
+shape = SubResource( 1 )
+
+[node name="RightGoal" type="StaticBody2D" parent="."]
+position = Vector2( 1242, 360 )
+rotation = 3.14159
+collision_layer = 4
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightGoal"]
+shape = SubResource( 1 )
+
+[node name="RightScoreArea" type="Area2D" parent="RightGoal"]
+position = Vector2( -28, 0 )
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightGoal/RightScoreArea"]
+shape = SubResource( 1 )
+
+[node name="outer_board" type="Sprite" parent="."]
+position = Vector2( 640, 360 )
+texture = ExtResource( 5 )
+
+[node name="MidBlock" type="StaticBody2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MidBlock"]
+position = Vector2( 640, 360 )
+shape = SubResource( 3 )
+
+[node name="UI" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+theme = ExtResource( 8 )
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Message" type="Control" parent="UI"]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MessageTimer" type="Timer" parent="UI/Message"]
+wait_time = 3.0
+one_shot = true
+
+[node name="Label" type="Label" parent="UI/Message"]
+margin_left = 620.0
+margin_top = 140.0
+margin_right = 660.0
+margin_bottom = 198.0
+grow_horizontal = 2
+custom_fonts/font = SubResource( 4 )
+text = "!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Player1Score" type="Label" parent="UI"]
+margin_left = 5.0
+margin_top = -5.0
+margin_right = 45.0
+margin_bottom = 53.0
+text = "0"
+
+[node name="Player2Score" type="Label" parent="UI"]
+margin_left = 1235.0
+margin_top = -5.0
+margin_right = 1275.0
+margin_bottom = 53.0
+grow_horizontal = 0
+text = "0"
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="body_entered" from="BallController/OuterGameArea" to="." method="_on_OuterGameArea_body_entered"]
+[connection signal="body_entered" from="LeftGoal/LeftScoreArea" to="." method="_on_LeftScoreArea_body_entered"]
+[connection signal="body_entered" from="RightGoal/RightScoreArea" to="." method="_on_RightScoreArea_body_entered"]
+[connection signal="timeout" from="UI/Message/MessageTimer" to="UI" method="_on_MessageTimer_timeout"]
